@@ -67,6 +67,12 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionHello($message = "Hello world") {
+        return $this->render('hello',[
+                'message' => $message
+            ]);
+    }
+
     public function actionLogout()
     {
         Yii::$app->user->logout();
