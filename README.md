@@ -16,8 +16,6 @@ DIRECTORY STRUCTURE
       views/              contains view files for the Web application
       web/                contains the entry script and Web resources
 
-
-
 REQUIREMENTS
 ------------
 
