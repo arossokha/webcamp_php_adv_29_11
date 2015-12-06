@@ -11,6 +11,8 @@ use app\models\ContactForm;
 use yii\helpers\Inflector;
 
 use app\models\EntryForm;
+use app\models\Country;
+use yii\data\Pagination;
 
 class SiteController extends Controller
 {
@@ -52,7 +54,23 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $query = Country::find();
+
+        $pagination = new Pagination([
+            'defaultPageSize' => 2,
+            'totalCount' => $query->count(),
+        ]);
+
+        $countries = $query->orderBy(['code' => SORT_DESC])
+            -> where('population > 100')
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+
+        return $this->render('index', [
+            'countries' => $countries,
+            'pagination' => $pagination,
+        ]);
     }
 
     public function actionLogin()
