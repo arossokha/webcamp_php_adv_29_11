@@ -1,7 +1,10 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
+
+echo Yii::getAlias('@updatePath');  
 ?>
+
 <h1>Countries</h1>
 <ul>
 <?php foreach ($countries as $country): ?>

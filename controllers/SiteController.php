@@ -13,6 +13,7 @@ use yii\helpers\Inflector;
 use app\models\EntryForm;
 use app\models\Country;
 use yii\data\Pagination;
+use yii\db\Expression;
 
 class SiteController extends Controller
 {
@@ -50,6 +51,74 @@ class SiteController extends Controller
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
+    }
+
+    public function actionSql ()
+    {
+        $db = Yii::$app->getDb();
+        $db = Yii::$app->db;
+        $db = Yii::$app->get('db');
+/**
+ * query all
+ */
+        // $data = $db->createCommand('SELECT * FROM country')
+        //     ->queryAll();
+
+        // return '<pre>'.var_export($data,true);
+/**
+ * query one
+ */
+        // $data = $db->createCommand('SELECT * FROM country LIMIT 1')
+        //     ->queryOne();
+
+        // return '<pre>'.var_export($data,true);
+        
+/**
+ * query scalar
+ */
+        // $data = $db->createCommand('SELECT COUNT(*) as `count` FROM country')->queryScalar();
+        // $data = $db->createCommand('SELECT code FROM country LIMIT 1')->queryScalar();
+        // $data = $db->createCommand('SELECT SUM(population) as `count` FROM country')->queryScalar();
+
+        // return '<pre>'.var_export($data,true);
+        
+
+/**
+ * bind params
+ */
+        // $populationLimit = 100000000;
+        // $data = $db->createCommand('SELECT * FROM country WHERE population < :p ')->bindParam(':p',$populationLimit)
+        //     ->queryAll();
+
+        // return '<pre>'.var_export($data,true);
+/**
+ * execute sql
+ */
+   //  $executeResult = $db->createCommand('UPDATE country SET population=population + 1000')
+   // ->execute();
+
+   //      $data = $db->createCommand('SELECT * FROM country ')->queryAll();
+
+   //      return '<pre>'.$executeResult.var_export($data,true);
+/**
+ * insert data and update with query builder
+ */
+        // $db->createCommand()->insert('country', [
+        //     'name' => 'Ukraine',
+        //     'code' => 'UA',
+        //     'population' => 43000000,
+        // ])->execute();
+        
+        //  $executeResult = $db->createCommand()->update('country',['population' => 1000])
+        // ->execute();
+
+        $executeResult = $db->createCommand()->update('country',['population' => new Expression('population+10000')])
+        ->execute();
+
+        $data = $db->createCommand('SELECT * FROM country ')->queryAll();
+
+        return '<pre>'.var_export($data,true);
+
     }
 
     public function actionIndex()
