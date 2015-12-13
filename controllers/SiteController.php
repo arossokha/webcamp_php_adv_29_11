@@ -14,6 +14,7 @@ use app\models\EntryForm;
 use app\models\Country;
 use yii\data\Pagination;
 use yii\db\Expression;
+use yii\db\Query;
 
 class SiteController extends Controller
 {
@@ -112,13 +113,59 @@ class SiteController extends Controller
         //  $executeResult = $db->createCommand()->update('country',['population' => 1000])
         // ->execute();
 
-        $executeResult = $db->createCommand()->update('country',['population' => new Expression('population+10000')])
-        ->execute();
+        // $executeResult = $db->createCommand()->update('country',['population' => new Expression('population+10000')])
+        // ->execute();
 
-        $data = $db->createCommand('SELECT * FROM country ')->queryAll();
+        // $data = $db->createCommand('SELECT * FROM country ')->queryAll();
 
-        return '<pre>'.var_export($data,true);
+        // return '<pre>'.var_export($data,true);
+/**
+ * query builder
+ */
+        $query = new Query();
+        // $data = $query->select('name,code')
+        // $data = $query->select(['code','name'])
+        // $data = $query->select(['rename column' => 'code','name'])
 
+        // ->from('country')
+        // ->where(['name' => 'Canada','code' => 'AU'])
+        // ->all();
+
+        $data = $query->select(['code','name'])
+        ->from('country')
+        ->where(['like','name','Ca'])
+        ->where(['like','name','C%',false])
+        ->where(['like','name','C%',false])
+        // ->where('name = :n',[':n' => 'Canada'])
+        ->where(['or',['name' => 'Canada'],['name' => 'China']])
+        ->where(['or',['or',['name' => 'Canada'],['name' => 'Ukraine']],['name' => 'China']])
+        ->where(['in','code',['UA','GB']])
+        ->andWhere(['>','population',10000])
+        ->orWhere(['code'=>'CN'])
+        ->all();
+
+        /**
+         * filters
+         */
+        $name = 'China';
+        $code = null;
+        $population = 1000;
+        $data = $query->select(['code','name'])
+        ->from('country')
+        // ->filterWhere([
+        //     'name' => $name,
+        //     'code' => $code
+        // ])
+        ->filterWhere(['>','population',$population])
+        // ->orderBy('code DESC')
+        ->orderBy(['name' => SORT_DESC,'code' => SORT_ASC])
+        ->limit(5)
+        ->offset(1)
+        ->all();
+
+        return $this->render('sql',[
+            'data' => $data
+        ]);
     }
 
     public function actionIndex()
