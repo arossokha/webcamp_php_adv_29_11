@@ -26,6 +26,32 @@ class CountryController extends Controller
         ];
     }
 
+    public function actionActiveRecord() {
+
+        $countryExists = Country::find()->where(['code' => 'PR'])->exists();
+        if(!$countryExists) {
+            $model = new Country();
+            $model->name = 'Pery';
+            $model->code = 'PR';
+            if(!$model->save()) {
+                var_dump($model->getErrors());
+                return "Model not saved";
+            }
+        }
+
+        $country = Country::findOne('UA');
+
+        $countries = Country::findAll(['UA','GB']);
+
+        $searchModel = new CountrySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     /**
      * Lists all Country models.
      * @return mixed

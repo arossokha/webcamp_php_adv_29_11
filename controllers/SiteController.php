@@ -12,6 +12,7 @@ use yii\helpers\Inflector;
 
 use app\models\EntryForm;
 use app\models\Country;
+use app\models\RegistrationForm;
 use yii\data\Pagination;
 use yii\db\Expression;
 use yii\db\Query;
@@ -186,6 +187,23 @@ class SiteController extends Controller
         return $this->render('index', [
             'countries' => $countries,
             'pagination' => $pagination,
+        ]);
+    }
+
+    public function actionRegister()
+    {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new RegistrationForm();
+        if ($model->load(Yii::$app->request->post()) && $model->register()) {
+             return $this->render('reg-success', [
+                'model' => $model,
+            ]);;
+        }
+        return $this->render('register', [
+            'model' => $model,
         ]);
     }
 

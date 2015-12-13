@@ -29,6 +29,7 @@ class Country extends \yii\db\ActiveRecord
         return [
             [['code', 'name'], 'required'],
             [['population'], 'integer'],
+            ['code', 'unique'],
             [['code'], 'string', 'max' => 2],
             [['name'], 'string', 'max' => 52]
         ];
@@ -44,5 +45,20 @@ class Country extends \yii\db\ActiveRecord
             'name' => Yii::t('app', 'Name'),
             'population' => Yii::t('app', 'Population'),
         ];
+    }
+
+    public function getNameText() {
+        return strtoupper($this->name);
+    }
+
+    public function beforeSave($insert) {
+        if(parent::beforeSave($insert)) {
+            if(10000 > $this->population) {
+                $this->population = 10000;
+            }
+            return true;
+        }
+        
+        return false;
     }
 }
