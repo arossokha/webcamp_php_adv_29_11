@@ -10,8 +10,6 @@ use yii\base\Model;
  */
 class RegistrationForm extends Model
 {
-    public $firstName;
-    public $lastName;
     public $email;
     public $password;
     public $passwordConfirm;
@@ -31,7 +29,8 @@ class RegistrationForm extends Model
                     // }'
                 ],
             [
-                ['email', 'passwordConfirm' ,'password','firstName', 'lastName'], 'required'
+                ['email', 'passwordConfirm' ,'password'], 
+                'required'
             ],
             [['email'],'unique', 'targetClass' => 'app\models\User'],
             ['password','compare','compareAttribute' => 'passwordConfirm' ],
@@ -60,11 +59,18 @@ class RegistrationForm extends Model
     {
         if ($this->validate()) {
             $user = new User();
-            // $user->firstName = $this->firstName;
-            // $user->lastName = $this->lastName;
+            $user->setScenario(User::SCENARIO_REGISTER);
             $user->email = $this->email;
             $user->password = $this->password;
-            return $user->save();
+            $saveResult = $user->save();
+            if(!$saveResult) {
+                /**
+                 * @todo: remove when you need to use this on real server
+                 */
+                var_dump($user->getErrors());
+                die();
+            }
+            return $saveResult;
         }
         return false;
     }

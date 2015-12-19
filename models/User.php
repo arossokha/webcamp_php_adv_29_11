@@ -25,17 +25,28 @@ class User extends \yii\db\ActiveRecord
         return 'User';
     }
 
+    // const SCENARIO_LOGIN = 'login';
+    const SCENARIO_REGISTER = 'register';
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_REGISTER] = ['email', 'password'];
+        return $scenarios;
+    }
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['email', 'firstName', 'lastName'], 'required'],
-            // [['email', 'firstName', 'lastName'], 'required'],
+            [['email','password'], 'required','on' => self::SCENARIO_REGISTER],
+            [['firstName', 'lastName'],'required'],
             [['birthDay'], 'safe'],
             [['email'], 'email'],
-            [['email'], 'unique'],
+            [['email'], 'unique','on' => [
+            self::SCENARIO_REGISTER,self::SCENARIO_DEFAULT]],
             [['info'], 'string'],
             [['email'], 'string', 'max' => 255],
             [['firstName', 'lastName'], 'string', 'max' => 50],
