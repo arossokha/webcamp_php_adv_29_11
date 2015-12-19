@@ -200,7 +200,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->register()) {
              return $this->render('reg-success', [
                 'model' => $model,
-            ]);;
+            ]);
         }
         return $this->render('register', [
             'model' => $model,
