@@ -48,6 +48,11 @@ class CountrySearch extends Country
             'pagination' => [
                 'pageSize' => 20,
             ],
+            'sort' => [
+                'defaultOrder' => [
+                    'code' => SORT_DESC,
+                ]
+            ],
         ]);
 
         $this->load($params);
