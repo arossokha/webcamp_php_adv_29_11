@@ -151,4 +151,12 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return $this->lastName. ' '.$this->firstName;
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBooks()
+    {
+        return $this->hasMany(Book::className(), ['userId' => 'userId']);
+    }
 }
