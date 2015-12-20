@@ -16,9 +16,16 @@ use Yii;
  * @property string $info
  * @property string $authKey
  * @property string $token
+ * @property string $image
  */
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
+
+    /**
+     * Attr for work with load file
+     */
+    public $file;
+
     /**
      * @inheritdoc
      */
@@ -45,8 +52,9 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return [
             [['email','password'], 'required','on' => self::SCENARIO_REGISTER],
             [['firstName', 'lastName'],'required'],
-            [['birthDay'], 'safe'],
+            [['birthDay','image'], 'safe'],
             [['email'], 'email'],
+            [['file'], 'file', 'extensions' => 'png, jpg'],
             [['email'], 'unique','on' => [
             self::SCENARIO_REGISTER,self::SCENARIO_DEFAULT]],
             [['info'], 'string'],
