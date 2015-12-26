@@ -58,12 +58,16 @@ class CountryController extends Controller
      */
     public function actionIndex()
     {
+        throw new Exception("Error Processing Request", 1);
+        
+
         $searchModel = new CountrySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'message' => Yii::$app->session->getFlash('countryDeleted')
         ]);
     }
 
@@ -88,7 +92,7 @@ class CountryController extends Controller
     {
         $model = new Country();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->code]);
         } else {
             return $this->render('create', [
@@ -125,6 +129,7 @@ class CountryController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        Yii::$app->session->setFlash('countryDeleted', Yii::t('app','You deleted country successfully.'));
 
         return $this->redirect(['index']);
     }

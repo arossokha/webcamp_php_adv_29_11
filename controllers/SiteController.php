@@ -9,6 +9,8 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use yii\helpers\Inflector;
+use yii\helpers\VarDumper;
+use yii\helpers\Url;
 
 use app\models\EntryForm;
 use app\models\Country;
@@ -53,6 +55,80 @@ class SiteController extends Controller
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
+    }
+
+    public function actionUrl() {
+        $urls = [];
+
+        $urls[] = Url::base();
+        $urls[] = Url::current();
+        $urls[] = Url::previous(); // use before Url::remember()
+        $urls[] = Url::home();
+        $urls[] = Url::to('/');
+        $urls[] = Url::to('/test');
+        $urls[] = Url::to(['book']);
+
+        return VarDumper::dumpAsString($urls,10,true);
+    }
+
+
+    public function actionRequest() {
+        $request = Yii::$app->request;
+
+        $requests = [];
+
+        $requests[] = $request;
+        $requests[] = $request->get();
+        $requests[] = $request->post();
+        $requests[] = $request->get('type');
+        $requests[] = $request->get('type','html');
+        // load data from get or from post array
+        $requests[] = $request->getBodyParam('id');
+
+        $headers = Yii::$app->request->headers;
+        $requests[] = $headers;
+
+
+        return VarDumper::dumpAsString($requests,10,true);
+    }
+
+    public function actionResponse() {
+
+        $response = Yii::$app->response;
+        $response->format = \yii\web\Response::FORMAT_JSON;
+        $response->format = \yii\web\Response::FORMAT_XML;
+        // $response->format = \yii\web\Response::FORMAT_JSONP;
+        $response->data = [
+            'message' => 'hello world',
+            'test' => 123,
+         ];
+
+        return $response;
+
+        $response = Yii::$app->response;
+
+        $responses = [];
+
+        $responses[] = $response;
+        $response->statusCode = 400;
+
+        return VarDumper::dumpAsString($responses,10,true);
+    }
+
+    public function actionSession() {
+        $session = Yii::$app->session;
+        $session = Yii::$app->get('session');
+        $session = Yii::$app->getSession();
+
+        $counter = $session->get('counter');
+        if($counter) {
+            $counter += 1;
+        } else {
+            $counter = 1;
+        }
+        $session->set('counter',$counter);
+
+        return $counter;
     }
 
     public function actionSql ()

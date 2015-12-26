@@ -14,6 +14,17 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'UIVUedKDwpUwXbkAWNs6_kOQmpDEShGV',
         ],
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'enableStrictParsing' => false,
+            'rules' => require(__DIR__ . '/rules.php'),
+        ],
+        'session' => [
+            'class' => 'yii\web\DbSession',
+            // 'db' => 'mydb',  // ID компонента для взаимодействия с БД. По умолчанию 'db'.
+            // 'sessionTable' => 'my_session', // название таблицы для хранения данных сессии. По умолчанию 'session'.
+        ],
         'formatter' => [
             'locale' => 'ua-UA',
             // 'dateFormat' => 'dd.MM.yyyy',

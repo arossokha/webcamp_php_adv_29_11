@@ -19,6 +19,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(Yii::t('app', 'Create Country'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
+    <?php if(strlen($message)) { ?>
+    <div class="alert alert-success">
+      <strong>Success!</strong> <?php echo $message;?>
+    </div>
+    <?php } ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
