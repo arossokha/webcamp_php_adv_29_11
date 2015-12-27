@@ -26,11 +26,8 @@ $this->registerJsFile('/js/editor.js', ['depends' => [\yii\web\JqueryAsset::clas
 <div class="country-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Country'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <h2>This is new theme</h2>
 
     <?php if(strlen($message)) { ?>
     <div class="alert alert-success">

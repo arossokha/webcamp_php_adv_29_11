@@ -23,6 +23,14 @@ return [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['trace'],
+                ],
+                [
+                    'class' => 'yii\log\DbTarget',
+                    // 'levels' => ['error', 'warning'],
+                ],
             ],
         ],
         'db' => $db,

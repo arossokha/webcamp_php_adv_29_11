@@ -26,7 +26,7 @@ $config = [
             // 'sessionTable' => 'my_session', // название таблицы для хранения данных сессии. По умолчанию 'session'.
         ],
         'formatter' => [
-            'locale' => 'ua-UA',
+            // 'locale' => 'ua-UA',
             // 'dateFormat' => 'dd.MM.yyyy',
             'decimalSeparator' => ',',
             'thousandSeparator' => ' ',
@@ -55,6 +55,41 @@ $config = [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['trace'],
+                    'logFile' => '@runtime/logs/trace.log',
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['trace'],
+                    'categories' => [
+                        'yii\web\UrlRule::parseRequest',
+                        'application'
+                    ],
+                    'logVars' => [],
+                    'logFile' => '@runtime/logs/useful.log',
+                    'prefix' => function ($message) {
+                        $user = Yii::$app->has('user', true) ? Yii::$app->get('user') : null;
+                        $userID = $user ? $user->getId(false) : '-';
+                        return "[$userID]";
+                    }
+                ],
+
+                [
+                    'class' => 'yii\log\DbTarget',
+                    'levels' => ['error', 'warning'],
+                ],
+
+            ],
+        ],
+        'view' => [
+            'theme' => [
+                'basePath' => '@app/themes/basic',
+                // 'baseUrl' => '@web/themes/basic',
+                'pathMap' => [
+                    '@app/views' => '@app/themes/basic',
                 ],
             ],
         ],

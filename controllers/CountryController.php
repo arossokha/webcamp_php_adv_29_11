@@ -8,6 +8,7 @@ use app\models\CountrySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\VarDumper;
 
 /**
  * CountryController implements the CRUD actions for Country model.
@@ -58,15 +59,32 @@ class CountryController extends Controller
      */
     public function actionIndex()
     {
-        throw new Exception("Error Processing Request", 1);
-        
+        // throw new \Exception("Error Processing Request", 1);
 
+        Yii::trace('Load country index');
         $searchModel = new CountrySearch();
+        Yii::trace(VarDumper::dumpAsString($searchModel));
+
+        /**
+         * replace theme on live site
+         */
+        $view = Yii::$app->get('view');
+        $view->theme->pathMap['@app/views'] = '@app/themes/shadow';
+        $view->theme->pathMap['@app/views'] = '@app/views';
+
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $db = Yii::$app->get('db');
+        $countryNames = $db->createCommand('SELECT name FROM country')
+            ->queryColumn();
+        Yii::trace("Country names:\n".VarDumper::dumpAsString($countryNames));
+
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'countryNames' => $countryNames,
             'message' => Yii::$app->session->getFlash('countryDeleted')
         ]);
     }
